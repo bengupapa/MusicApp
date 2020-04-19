@@ -1,0 +1,115 @@
+﻿@using MuziqApp.Models;
+@model IEnumerable<Artist>
+@{
+    Layout = "~/Views/Shared/_Foundation.cshtml";
+}
+<div class="container" id="testContainer">
+    <!--STORAGE-->
+    <span id="current-selected-artist" class="storage"></span>
+    <span id="current-selected-album" class="storage"></span>
+    <span id="current-selected-song" class="storage"></span>
+
+    <div class="row" id="">
+        <div class="col-xs-3 side-wrapper">
+            @foreach (var artist in Model)
+            {
+                <div class="artist-wrapper artist-wrapper-default col-xs-12" data-id="@artist.Id" id="artist_wrapper_@artist.Id">
+                    <div class="row artist-avatar">
+                        <img src="@Url.Action("GetAlbumArt", "Image", new { imageUrl = artist.Avatar } )" class="album-art" />
+                    </div>
+                    <div class="row artist-album-count artist-album-count-default" id="artist_album_count_@artist.Id">
+                        <b>@artist.Name</b><br />
+                        @artist.NumberOfAlbums <span>Albums</span>
+                    </div>
+                </div>
+                <div class="spacer"></div>
+            }
+        </div>
+        <div class="col-xs-9 main-wrapper">
+            <div class="play-view">
+                <span class="play-view-type active" data-play-view="1">View Playlist</span>
+                <span class="play-view-type" data-play-view="0">View Current Track</span>
+            </div>
+            <div class="row media-wrapper">
+                <div style="height:100%">
+                    <div class="media-info-wrapper"></div>
+                    <div class="media-controls-wrapper">
+                        <div class="col-xs-1">
+                            <div class="play-button play-button-play play-button-default">
+                                <span id="pause-song">▐▐</span>
+                                <span id="play-song">►</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-5 progress-bar-cont">
+                            <div class="outter-progress-bar play-button-default">
+                                <div class="inner-progress-bar immbeded-text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-1 duration-label">
+                            <b class="progress-timer">0:00</b>
+                        </div>
+                        <div class="col-xs-2 volume-bar-cont">
+                            <span class="volume-control-label vol-dummy">vol</span>
+                            <div class="volume-control outter-volume-bar">
+                                <div class="inner-volume-bar immbeded-text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-1 repeat-label">
+                            <span>
+                                <b class="repeat-state active" data-mode="0">Rep off</b>
+                                <b class="repeat-state" data-mode="1">Repeat</b>
+                                <b class="repeat-state" data-mode="2">Shuffle</b>
+                            </span>
+                        </div>
+                        <div class="col-xs-2 control-buttons-cont">
+                            <div class="control-buttons">
+                                <div><span class="prev-button">◄</span></div>
+                                <div class="stop-button">
+                                </div>
+                                <div><span class="next-button">►</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row albums-wrapper" id="albums_wrapper"></div>
+            
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/App/EventHandlerRegistory.js"></script>
+    <script src="~/Scripts/App/FacadeController.js"></script>
+    <script src="~/Scripts/App/MusicController.js"></script>
+    <script src="~/Scripts/App/Constants.js"></script>
+    <script src="~/Scripts/App/Models/MediaStateMessage.js"></script>
+    <script src="~/Scripts/App/Models/MediaState.js"></script>
+    <script src="~/Scripts/App/MessageHandlerRegistry.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            window.musicApp.Controllers.MusicController.getMediaState();
+        });
+
+        (function (app) {
+            conn = $.connection("/signalr");
+
+            conn.start().done(() => {
+                console.log("connected");
+            }).fail(function () {
+                console.log("Connection failed");
+            });
+
+            conn.received((msg) => {
+                app.Controllers.FacadeController.handleSignals(msg);
+            });
+        }(window.musicApp));
+
+    </script>
+}
+
+

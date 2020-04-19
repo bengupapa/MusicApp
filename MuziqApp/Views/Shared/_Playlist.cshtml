@@ -1,0 +1,46 @@
+﻿@model List<MuziqApp.Models.Song>
+<div class="play-list-wrapper col-xs-12">
+    @{
+        if (Model.Any())
+        {
+            <div class="play-list-clear col-xs-12">
+                <div class="col-xs-11" style="text-align:right">
+                </div>
+                <div class="col-xs-1 clear-play-list" onclick="clearPlaylist()">
+                    <div class="row clear-label" title="clear playlist">X</div>
+                </div>
+            </div>
+            <div class="play-list-clear-fix"></div>
+            foreach (var song in Model)
+            {
+                <div class="play-list-track col-xs-12">
+                    <div class="col-xs-11 playlist-track" onclick="playSong('@song.Id')">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                @song.Airtist - @song.Name
+                            </div>
+                            <div class="col-xs-2 playlist-song-state" id="playlist_song_state_@song.Id">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="remove_playlist_button_@song.Id" class="col-xs-1 remove-playlist-button" onclick="removeFromPlaylist('@song.Id')">
+                        <div class="row remove-label" title="remove track">X</div>
+                    </div>
+                </div>
+                <div class="play-list-clear-fix"></div>
+            }
+        }
+        else
+        {
+            <div class="play-list-controls pull-right col-xs-12">
+                <span class="pull-right" id="clear-play-list">
+                </span>
+            </div>
+            <div class="play-list-track col-xs-12">
+                <div class="col-xs-12 playlist-track" style="text-align:center">
+                    playlist is empty
+                </div>
+            </div>
+        }
+    }
+</div>

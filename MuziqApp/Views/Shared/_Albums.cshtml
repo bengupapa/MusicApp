@@ -1,0 +1,23 @@
+﻿@model IEnumerable<MuziqApp.Models.Album>
+@foreach (var album in Model)
+{
+    <div id="album_details_@album.Id" class="col-xs-12 album-details album-details-default" >
+        <div class="col-xs-8" onclick="expandSongs('@album.Id')"><h3>@album.Name</h3></div>
+        <div class="col-xs-2" onclick="expandSongs('@album.Id')" style="padding-top:30px">@album.NumberOfSongs Tracks</div>
+        <div class="col-xs-1" onclick="playAll('@album.Id')" style="text-align:right; padding-top:30px; padding-right:5px">play all</div>
+        <div class="col-xs-1" onclick="addAll('@album.Id')" style="text-align:right; padding-top:30px; padding-right:5px">add all</div>
+    </div>
+    <div id="songs_of_@album.Id" class="album-songs-wrapper" style="display:none">
+        @foreach (var song in album.Songs)
+        {
+            <div class="song-row" id="song_row_@song.Id">
+                <div class="col-xs-11 song-row-data" onclick="selectSong('@song.Id', '@album.ArtistName', '@album.Name', '@song.Name', '@album.ArtistId', '@album.Id')">
+                    <div class="col-xs-9">@song.Name</div>
+                    <div class="col-xs-1">@song.Duration</div>
+                    <div class="col-xs-2 song-state" id="cur-song-state_@song.Id" style="text-align:center;"></div>
+                </div>
+                <div class="col-xs-1 add-playlist-button" onclick="addToPlaylist('@song.Id')">add</div>
+            </div>
+        }
+    </div>
+}

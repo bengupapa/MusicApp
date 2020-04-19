@@ -1,0 +1,23 @@
+﻿@model MuziqApp.Models.MediaState
+@using MuziqApp.Externsions
+<div class="album-song-info">
+    <div class="album-song-name">
+        <p id="song_name">
+            @Model.SongName.SubStr(30)
+        </p>
+    </div>
+    <div class="album-song-details">
+        <span id="artist_name">
+            @Model.ArtistName
+        </span>
+        <span> - </span>
+        <span id="album_name">
+            @Model.AlbumName
+        </span>
+    </div>
+    <div class="album-song-state-cont">
+        <span class="album-song-state">
+            @Model.State
+        </span>
+    </div>
+</div>
